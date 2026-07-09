@@ -7,8 +7,8 @@ interface ProductProps {
   price: number;
   stock: number;
   categoryId: UniqueEntityId;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class Product {
