@@ -3,16 +3,16 @@ import { ValidationError } from '../../../../shared/domain/errors/ValidationErro
 
 interface CategoryProps {
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class Category {
-  private readonly id: UniqueEntityId;
+  private readonly _id: UniqueEntityId;
   private props: CategoryProps;
 
   private constructor(props: CategoryProps, id?: UniqueEntityId) {
-    this.id = id ?? new UniqueEntityId();
+    this._id = id ?? new UniqueEntityId();
     this.props = {
       ...props,
       name: Category.validateName(props.name),
@@ -23,6 +23,10 @@ export class Category {
 
   static create(props: CategoryProps, id?: UniqueEntityId) {
     return new Category(props, id);
+  }
+
+  get id(): UniqueEntityId {
+    return this._id;
   }
 
   get name() {
