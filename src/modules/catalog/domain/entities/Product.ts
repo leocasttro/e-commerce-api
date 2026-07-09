@@ -5,7 +5,7 @@ import { ProductStock } from '../value-objects/ProductStock';
 
 interface ProductProps {
   name: string;
-  description: string | null;
+  description?: string | null;
   price: number;
   stock: number;
   categoryId: UniqueEntityId;

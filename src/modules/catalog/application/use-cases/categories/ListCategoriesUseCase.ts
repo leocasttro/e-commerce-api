@@ -7,7 +7,7 @@ import { normalizePagination } from '../../../../../shared/application/paginatio
 export class ListCategoriesUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute(params: PaginationParams): Promise<PaginatedResult<Category>> {
+  async execute(params: Partial<PaginationParams>): Promise<PaginatedResult<Category>> {
     const pagination = normalizePagination(params);
 
     return this.categoryRepository.findMany(pagination);
