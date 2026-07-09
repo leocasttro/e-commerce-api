@@ -1,5 +1,7 @@
 import { UniqueEntityId } from '../../../../shared/domain/value-objects/UniqueEntityId';
 import { ValidationError } from '../../../../shared/domain/errors/ValidationError';
+import { ProductPrice } from '../value-objects/ProductPrice';
+import { ProductStock } from '../value-objects/ProductStock';
 
 interface ProductProps {
   name: string;
@@ -116,22 +118,10 @@ export class Product {
   }
 
   private static validatePrice(price: number): number {
-    if (price <= 0) {
-      throw new ValidationError('O preço do produto deve ser maior que zero.');
-    }
-
-    return price;
+    return ProductPrice.create(price).toNumber();
   }
 
   private static validateStock(stock: number): number {
-    if (!Number.isInteger(stock)) {
-      throw new ValidationError('O estoque do produto deve ser um número inteiro.');
-    }
-
-    if (stock < 0) {
-      throw new ValidationError('O estoque do produto não pode ser negativo.');
-    }
-
-    return stock;
+    return ProductStock.create(stock).toNumber();
   }
 }
