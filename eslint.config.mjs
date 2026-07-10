@@ -33,4 +33,16 @@ export default tseslint.config(
             'no-console': ['warn', { allow: ['log', 'warn', 'error'] }],
         },
     },
+    {
+        files: ['src/**/*.spec.ts'],
+        languageOptions: {
+            globals: {
+                beforeEach: 'readonly',
+                describe: 'readonly',
+                expect: 'readonly',
+                it: 'readonly',
+                jest: 'readonly',
+            },
+        },
+    },
 );
