@@ -1,5 +1,5 @@
 export const healthPaths = {
-  health: {
+  '/health': {
     get: {
       tags: ['Health'],
       summary: 'Verifica se a API esta em execucao',
