@@ -29,24 +29,24 @@ export class Category {
     return this._id;
   }
 
-  get name() {
+  get name(): string {
     return this.props.name;
   }
 
-  get createdAt() {
-    return this.props.createdAt;
+  get createdAt(): Date {
+    return this.props.createdAt!;
   }
 
-  get updatedAt() {
-    return this.props.updatedAt;
+  get updatedAt(): Date {
+    return this.props.updatedAt!;
   }
 
-  updateName(name: string) {
+  updateName(name: string): void {
     this.props.name = Category.validateName(name);
     this.touch();
   }
 
-  private touch() {
+  private touch(): void {
     this.props.updatedAt = new Date();
   }
 
