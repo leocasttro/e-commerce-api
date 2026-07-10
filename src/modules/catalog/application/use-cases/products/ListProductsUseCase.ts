@@ -5,7 +5,7 @@ import { Product } from '../../../domain/entities/Product';
 import { ValidationError } from '../../../../../shared/domain/errors/ValidationError';
 import { normalizePagination } from '../../../../../shared/application/pagination/normalizePagination';
 
-interface ListProductsInput extends PaginationParams, ProductFilters {}
+interface ListProductsInput extends Partial<PaginationParams>, ProductFilters {}
 
 export class ListProductsUseCase {
   constructor(private readonly productRepository: ProductRepository) {}
