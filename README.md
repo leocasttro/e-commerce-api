@@ -241,6 +241,123 @@ Producao:
 npm start
 ```
 
+## Rodando com Docker
+
+Tambem e possivel subir a API e o PostgreSQL com Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Esse comando cria dois servicos:
+
+- `postgres`: banco PostgreSQL com database `ecommerce_api`
+- `api`: aplicacao Node.js na porta `3000`
+
+Ao iniciar, o container da API executa:
+
+```bash
+npx prisma migrate deploy
+npm start
+```
+
+Assim as migrations versionadas em `prisma/migrations` sao aplicadas automaticamente antes da API subir.
+
+Nao e necessario acessar o container para executar comandos do Prisma manualmente. O proprio Docker executa o comando por meio do `CMD` definido no `Dockerfile`:
+
+```dockerfile
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+```
+
+Isso significa que, ao rodar:
+
+```bash
+docker compose up --build
+```
+
+o fluxo executado pelo container da API e:
+
+```txt
+1. aguarda o PostgreSQL ficar saudavel
+2. aplica as migrations com npx prisma migrate deploy
+3. inicia a API com npm start
+```
+
+O comando `migrate deploy` foi usado porque e o comando recomendado para ambientes containerizados ou de producao. Ele apenas aplica migrations ja existentes em `prisma/migrations`, sem criar uma nova migration. Para desenvolvimento local, quando for criar novas migrations, use `npx prisma migrate dev`.
+
+URLs locais:
+
+```txt
+API: http://localhost:3000
+Swagger: http://localhost:3000/docs
+PostgreSQL: localhost:5432
+```
+
+Para parar os containers:
+
+```bash
+docker compose down
+```
+
+Para remover tambem o volume do banco:
+
+```bash
+docker compose down -v
+```
+
+## Testes automatizados
+
+O projeto possui testes unitarios com Jest cobrindo dominio e casos de uso.
+
+Foram criados repositórios em memoria para testar as regras de negocio sem depender de Express, Prisma ou PostgreSQL:
+
+```txt
+src/modules/catalog/tests/repositories/
+  InMemoryCategoryRepository.ts
+  InMemoryProductRepository.ts
+```
+
+Essa abordagem reforca a separacao da arquitetura: os casos de uso dependem de contratos do dominio e podem ser testados isoladamente.
+
+Cobertura dos testes:
+
+- entidades `Category` e `Product`
+- validacoes de nome obrigatorio
+- validacoes de preco maior que zero
+- validacoes de estoque inteiro e nao negativo
+- criacao, listagem, busca, atualizacao e exclusao de categorias
+- bloqueio de categoria duplicada
+- bloqueio de exclusao de categoria com produtos vinculados
+- criacao, listagem, busca, atualizacao e exclusao de produtos
+- validacao de categoria existente ao criar ou atualizar produto
+- filtros de produto por categoria, faixa de preco e nome parcial
+- busca de produto por ID retornando categoria
+
+Rodar testes:
+
+```bash
+npm test
+```
+
+Rodar testes em modo watch:
+
+```bash
+npm run test:watch
+```
+
+Rodar testes com cobertura:
+
+```bash
+npm run test:coverage
+```
+
+Resultado atual da suite:
+
+```txt
+Test Suites: 13 passed, 13 total
+Tests: 40 passed, 40 total
+```
+
 ## Scripts
 
 ```bash
@@ -249,6 +366,9 @@ npm run build
 npm start
 npm run lint
 npm run lint:fix
+npm test
+npm run test:watch
+npm run test:coverage
 npm run format
 npm run format:check
 ```
@@ -451,6 +571,7 @@ Antes de entregar:
 
 ```bash
 npm run lint
+npm test
 npx tsc --noEmit
 npm run build
 ```
