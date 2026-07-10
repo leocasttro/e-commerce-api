@@ -1,3 +1,6 @@
+import { parameters } from './components/parameters';
+import { responses } from './components/responses';
+import { schemas } from './components/schemas';
 import { categoryPaths } from './paths/categoryPaths';
 import { healthPaths } from './paths/healthPaths';
 import { productPaths } from './paths/productPaths';
@@ -22,40 +25,8 @@ export const openApiDocument = {
     ...productPaths,
   },
   components: {
-    schemas: {
-      ErrorResponse: {
-        type: 'object',
-        properties: {
-          error: {
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
-        },
-      },
-      Category: {
-        type: 'object',
-        properties: {
-          id: { type: 'string', format: 'uuid' },
-          name: { type: 'string' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-      Product: {
-        type: 'object',
-        properties: {
-          id: { type: 'string', format: 'uuid' },
-          name: { type: 'string' },
-          description: { type: 'string', nullable: true },
-          price: { type: 'number' },
-          stock: { type: 'integer' },
-          categoryId: { type: 'string', format: 'uuid' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
-    },
+    parameters,
+    responses,
+    schemas,
   },
 };
